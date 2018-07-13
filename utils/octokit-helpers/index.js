@@ -3,7 +3,7 @@ const base64 = require("base-64");
 const yaml = require("js-yaml");
 const log = require("../logger");
 
-const { GITHUB_TOKEN } = require("../../config");
+const { GITHUB_TOKEN, JIRA_BASE_URL } = require("../../config");
 
 octokit.authenticate({
     type: "token",
@@ -55,7 +55,43 @@ const createGithubComment = async ({ owner, repo, number, body }) => {
     }
 };
 
+const getComments = async ({ owner, repo, number }) => {
+    try {
+        return await octokit.issues.getComments({
+            owner,
+            repo,
+            number
+        });
+    } catch (err) {
+        log.error({ owner, repo, number }, "Failed to getComments");
+        throw new Error("Failed to create comment");
+    }
+};
+
+const getJiraTicketNumberFromGithubComments = async ({ owner, repo, number }) => {
+    try {
+        const { data: comments = [] } = await getComments({ owner, repo, number });
+        const commentsWithJiraInformation = comments.filter(({ body = "" } = {}) => {
+            return body.indexOf(`${JIRA_BASE_URL}/browse/`) > -1;
+        });
+
+        const { body: jiraComment = "" } = commentsWithJiraInformation.pop() || {};
+
+        log.info(
+            {
+                owner,
+                repo,
+                number
+            },
+            "Found JIRA ticket number"
+        );
+
+        return jiraComment.split("/").pop() || undefined;
+    } catch (err) {}
+};
+
 module.exports = {
     getConfigFromRepo,
-    createGithubComment
+    createGithubComment,
+    getJiraTicketNumberFromGithubComments
 };

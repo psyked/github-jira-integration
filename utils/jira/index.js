@@ -5,28 +5,35 @@ const log = require("../logger");
 
 const { JIRA_BASE_URL, JIRA_TOKEN, JIRA_USERNAME } = require("../../config");
 
+const propertiesMustBeDefined = object => {
+    Object.keys(object).forEach(key => {
+        if (object[key] === undefined) {
+            log.error(object, `Missing configuration, ${key} is required when creating JIRA issues`);
+            throw new Error(`${key} is required`);
+        }
+    });
+};
+
+const generateRequestOptions = () => {
+    return {
+        method: "POST",
+        headers: {
+            Authorization: `Basic ${base64.encode(`${JIRA_USERNAME}:${JIRA_TOKEN}`)}`,
+            "Content-Type": "application/json"
+        },
+        json: true
+    };
+};
+
 const createIssue = async (options = {}) => {
     const { issueType, projectId, ...restOfOptions } = options;
 
-    const requiredProperties = {
+    propertiesMustBeDefined({
         JIRA_USERNAME,
         JIRA_TOKEN,
         JIRA_BASE_URL,
         issueType,
         projectId
-    };
-
-    Object.keys(requiredProperties).forEach(key => {
-        if (requiredProperties[key] === undefined) {
-            log.error(
-                {
-                    projectId,
-                    issueType
-                },
-                `Missing configuration, ${key} is required when creating JIRA issues`
-            );
-            throw new Error(`${key} is required`);
-        }
     });
 
     const defaults = {
@@ -36,13 +43,9 @@ const createIssue = async (options = {}) => {
 
     const payload = Object.assign(defaults, restOfOptions);
 
-    var options = {
-        method: "POST",
+    const requestOptions = {
+        ...generateRequestOptions(),
         uri: url.resolve(JIRA_BASE_URL, "/rest/api/2/issue"),
-        headers: {
-            Authorization: `Basic ${base64.encode(`${JIRA_USERNAME}:${JIRA_TOKEN}`)}`,
-            "Content-Type": "application/json"
-        },
         body: {
             fields: {
                 project: {
@@ -53,11 +56,11 @@ const createIssue = async (options = {}) => {
                 },
                 ...payload
             }
-        },
-        json: true
+        }
     };
+
     try {
-        const data = await rp(options);
+        const data = await rp(requestOptions);
         log.info(
             {
                 projectId,
@@ -68,12 +71,41 @@ const createIssue = async (options = {}) => {
         );
         return data;
     } catch (err) {
-        log.error(err);
-        throw new Error("Failed to make new JIRA issue");
+        throw new Error("Failed to make a new JIRA issue");
+        return Promise.reject();
+    }
+};
+
+const moveIssue = async ({ issueNumber, transitionId } = {}) => {
+    propertiesMustBeDefined({
+        issueNumber,
+        transitionId,
+        JIRA_USERNAME,
+        JIRA_TOKEN,
+        JIRA_BASE_URL
+    });
+
+    const requestOptions = {
+        ...generateRequestOptions(),
+        uri: url.resolve(JIRA_BASE_URL, `/rest/api/2/issue/${issueNumber}/transitions?expand=transition.fields`),
+        body: {
+            transition: {
+                id: transitionId
+            }
+        }
+    };
+
+    try {
+        const data = await rp(requestOptions);
+        log.info(`Jira issue created`);
+        return data;
+    } catch (err) {
+        throw new Error("Failed to move JIRA issue");
         return Promise.reject();
     }
 };
 
 module.exports = {
-    createIssue
+    createIssue,
+    moveIssue
 };
