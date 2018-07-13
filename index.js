@@ -19,24 +19,29 @@ webhooks.on("*", ({ id, name, payload }) => {
     console.log(name, "event received");
 });
 
-webhooks.on("issues.opened", async ({ id, name, payload }) => {
-    const { issue, repository: { owner: { login } = {}, name: repo } = {} } = payload;
+webhooks.on(["issues.opened", "pull_request.opened"], async ({ id, name, payload }) => {
+    const { repository: { owner: { login } = {}, name: repo } = {} } = payload;
 
-    const { title, html_url, body, url, number } = issue;
+    const key = name === "issues" ? "issue" : name;
+    const configKey = key === "issue" ? "issueOpened" : "pullRequestOpened";
+    const summary = key === "issue" ? "Github Issue" : "Github Pull Request";
+    const data = payload[key];
+
+    const { title, html_url, body, url, number } = data;
 
     try {
         const projectConfig = await getConfigFromRepo({ owner: login, repo });
 
         const {
             jira: { projectId },
-            issueOpened: { jiraIssueType, epicLink: { id: customFieldId, epicId } = {} } = {}
+            [configKey]: { jiraIssueType, epicLink: { id: customFieldId, epicId } = {} } = {}
         } = projectConfig;
 
         const { key: jiraTicketNumber } = await jira.createIssue({
             projectId,
-            summary: title,
-            issueType: "Bug",
-            description: ` Issue: ${html_url} ${body}`,
+            summary: `${summary} - ${title}`,
+            issueType: jiraIssueType,
+            description: `${html_url} ${body}`,
             // If the epic links are set in the config, set them up.
             [customFieldId]: epicId
         });
@@ -53,23 +58,29 @@ webhooks.on("issues.opened", async ({ id, name, payload }) => {
                 login,
                 repo,
                 html_url,
-                url
+                url,
+                key,
+                configKey
             },
-            "Failed to create tickets in Jira and Github"
+            "Failed to create tickets for Jira & Github"
         );
-        throw new Error("Failed to create tickets in Jira and Github");
+        throw new Error("Failed to create tickets for Jira & Github");
     }
 });
 
-webhooks.on("issues.closed", async ({ id, name, payload }) => {
-    const { issue, repository: { owner: { login } = {}, name: repo } = {} } = payload;
+webhooks.on(["issues.closed", "pull_request.closed"], async ({ id, name, payload }) => {
+    const { repository: { owner: { login } = {}, name: repo } = {} } = payload;
 
-    const { title, html_url, body, url, number } = issue;
+    const key = name === "issues" ? "issue" : name;
+    const configKey = key === "issue" ? "issuedClosed" : "pullRequestClosed";
+    const data = payload[key];
+
+    const { title, html_url, body, url, number } = data;
 
     try {
         const projectConfig = await getConfigFromRepo({ owner: login, repo });
 
-        const { issueClosed: { jiraTranisitionId } = {} } = projectConfig;
+        const { [configKey]: { jiraTranisitionId } = {} } = projectConfig;
 
         const issueNumber = await getJiraTicketNumberFromGithubComments({
             owner: login,
@@ -85,7 +96,8 @@ webhooks.on("issues.closed", async ({ id, name, payload }) => {
                 repo,
                 number,
                 issueNumber,
-                jiraTranisitionId
+                jiraTranisitionId,
+                key
             },
             "Moved Jira Card"
         );
@@ -97,6 +109,7 @@ webhooks.on("issues.closed", async ({ id, name, payload }) => {
             body: `Closed Jira ticket: ${JIRA_BASE_URL}/browse/${issueNumber}`
         });
     } catch (err) {
+        console.log(err);
         log.error(
             {
                 login,
@@ -106,7 +119,7 @@ webhooks.on("issues.closed", async ({ id, name, payload }) => {
             },
             "Failed to close the ticket on Jira"
         );
-        throw new Error("Failed to create tickets in Jira and Github");
+        throw new Error("Failed to move tickets in Jira and Github");
     }
 });
 

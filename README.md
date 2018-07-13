@@ -11,8 +11,8 @@
 ## Features
 
 -   Setup once in your organisation and configure each project using the `.github/github-jira.yml` project file.
--   Automatically creates Jira cards when issues are created
--   Automatically closes Jira cards when issues are closed
+-   Automatically creates & closes Jira cards when issues are created & closed
+-   Automatically creates & closes Jira cards when pull requests are created & closed / merged
 
 ## Configration
 
