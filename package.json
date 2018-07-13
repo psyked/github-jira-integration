@@ -1,0 +1,35 @@
+{
+    "name": "github-jira",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "prestart": "node scripts/config-check",
+        "start": "node index.js",
+        "dev": "npm start && npx ngrok http 3000",
+        "test": "NODE_ENV=test WEBHOOK_SECRET=random GITHUB_TOKEN=1234 JIRA_USERNAME=test@test.com JIRA_TOKEN=123 JIRA_BASE_URL=https://test.atlassian.net JIRA_PROJECT_ID=1 jest",
+        "test:watch": "NODE_ENV=test WEBHOOK_SECRET=random GITHUB_TOKEN=1234 JIRA_USERNAME=test@test.com JIRA_TOKEN=123 JIRA_BASE_URL=https://test.atlassian.net JIRA_PROJECT_ID=1 jest --watchAll"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "prettier": {
+        "tabWidth": 4,
+        "printWidth": 120
+    },
+    "dependencies": {
+        "@octokit/rest": "^15.9.4",
+        "@octokit/webhooks": "^4.0.0",
+        "base-64": "^0.1.0",
+        "bunyan": "^1.8.12",
+        "js-yaml": "^3.12.0",
+        "request": "^2.87.0",
+        "request-promise": "^4.2.2"
+    },
+    "devDependencies": {
+        "jest": "^23.4.0",
+        "nock": "^9.4.2",
+        "prettier": "^1.13.7",
+        "proxyquire": "^2.0.1"
+    }
+}
