@@ -72,7 +72,7 @@ webhooks.on(["issues.closed", "pull_request.closed"], async ({ id, name, payload
     const { repository: { owner: { login } = {}, name: repo } = {} } = payload;
 
     const key = name === "issues" ? "issue" : name;
-    const configKey = key === "issue" ? "issuedClosed" : "pullRequestClosed";
+    const configKey = key === "issue" ? "issueClosed" : "pullRequestClosed";
     const data = payload[key];
 
     const { title, html_url, body, url, number } = data;
@@ -123,7 +123,12 @@ webhooks.on(["issues.closed", "pull_request.closed"], async ({ id, name, payload
     }
 });
 
-console.log("Listening on port 3000");
-require("http")
-    .createServer(webhooks.middleware)
-    .listen(3000);
+if (process.env.NODE_ENV === "test") {
+    require("http")
+        .createServer(webhooks.middleware)
+        .listen(3000);
+}
+
+module.exports = {
+    webhooks
+};
