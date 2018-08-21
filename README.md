@@ -14,7 +14,7 @@
 -   Automatically creates & closes Jira cards when issues are created & closed
 -   Automatically creates & closes Jira cards when pull requests are created & closed / merged
 
-## Configration
+## Configuration
 
 ## Getting Started
 
