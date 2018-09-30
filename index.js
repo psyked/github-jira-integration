@@ -1,3 +1,4 @@
+// @flow
 const WebhooksApi = require("@octokit/webhooks");
 const octokit = require("@octokit/rest")();
 
