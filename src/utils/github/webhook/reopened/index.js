@@ -13,7 +13,7 @@ module.exports = async ({ id, name, payload }) => {
     const { repository: { owner: { login } = {}, name: repo } = {} } = payload;
 
     const key = name === "issues" ? "issue" : name;
-    const configKey = key === "issue" ? "issueClosed" : "pullRequestClosed";
+    const configKey = key === "issue" ? "issueReopened" : "pullRequestReopened";
     const data = payload[key];
 
     const { title, html_url, body, url, number } = data;
@@ -47,7 +47,7 @@ module.exports = async ({ id, name, payload }) => {
             owner: login,
             repo,
             number,
-            body: `Closed Jira ticket: ${JIRA_BASE_URL}/browse/${issueNumber}`
+            body: `Reopened Jira ticket: ${JIRA_BASE_URL}/browse/${issueNumber}`
         });
     } catch (err) {
         console.log(err);
@@ -58,7 +58,7 @@ module.exports = async ({ id, name, payload }) => {
                 html_url,
                 url
             },
-            "Failed to close the ticket on Jira"
+            "Failed to reopen the ticket on Jira"
         );
         throw new Error("Failed to move tickets in Jira and Github");
     }

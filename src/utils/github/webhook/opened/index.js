@@ -1,13 +1,9 @@
 // @flow
 const jira = require("../../../../utils/jira");
-const {
-    getConfigFromRepo,
-    createGithubComment,
-    getJiraTicketNumberFromGithubComments
-} = require("../../../../utils/octokit-helpers");
+const { getConfigFromRepo, createGithubComment } = require("../../../../utils/octokit-helpers");
 const log = require("../../../../utils/logger");
 
-const { JIRA_BASE_URL, WEBHOOK_SECRET, GITHUB_TOKEN } = require("../../../../config");
+const { JIRA_BASE_URL } = require("../../../../config");
 
 module.exports = async ({ id, name, payload }) => {
     const { repository: { owner: { login } = {}, name: repo } = {} } = payload;

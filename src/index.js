@@ -22,6 +22,8 @@ webhooks.on("*", ({ id, name, payload }) => {
 
 webhooks.on(["issues.opened", "pull_request.opened"], require("./utils/github/webhook/opened"));
 
+webhooks.on(["issues.reopened", "pull_request.reopened"], require("./utils/github/webhook/reopened"));
+
 webhooks.on(["issues.closed", "pull_request.closed"], require("./utils/github/webhook/closed"));
 
 if (process.env.NODE_ENV === "test") {
