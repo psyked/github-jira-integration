@@ -2,10 +2,10 @@
     "name": "github-jira",
     "version": "1.0.0",
     "description": "",
-    "main": "index.js",
+    "main": "src/index.js",
     "scripts": {
-        "prestart": "node scripts/config-check",
-        "start": "node index.js",
+        "prestart": "node src/scripts/config-check",
+        "start": "node src/index.js",
         "dev": "npm start && npx ngrok http 3000",
         "test": "NODE_ENV=test WEBHOOK_SECRET=random GITHUB_TOKEN=1234 JIRA_USERNAME=test@test.com JIRA_TOKEN=123 JIRA_BASE_URL=https://test.atlassian.net JIRA_PROJECT_ID=1 jest",
         "test:watch": "NODE_ENV=test WEBHOOK_SECRET=random GITHUB_TOKEN=1234 JIRA_USERNAME=test@test.com JIRA_TOKEN=123 JIRA_BASE_URL=https://test.atlassian.net JIRA_PROJECT_ID=1 jest --watchAll",

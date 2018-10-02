@@ -1,11 +1,11 @@
-const { webhooks } = require("./");
 const http = require("http");
 const rp = require("request-promise");
 const crypto = require("crypto");
-const issueOpenedEvent = require("./events/issue-opened.json");
-const issueClosedEvent = require("./events/issue-closed.json");
-const pullRequestOpenedEvent = require("./events/pull-request-opened.json");
-const pullRequestClosedEvent = require("./events/pull-request-closed.json");
+const { webhooks } = require("./");
+const issueOpenedEvent = require("../sample-data/events/issue-opened.json");
+const issueClosedEvent = require("../sample-data/events/issue-closed.json");
+const pullRequestOpenedEvent = require("../sample-data/events/pull-request-opened.json");
+const pullRequestClosedEvent = require("../sample-data/events/pull-request-closed.json");
 
 const { getConfigFromRepo, createGithubComment } = require("./utils/octokit-helpers");
 const { createIssue, moveIssue } = require("./utils/jira");
