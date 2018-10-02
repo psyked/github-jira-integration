@@ -8,6 +8,7 @@
         "start": "node src/index.js",
         "dev": "npm start && npx ngrok http 3000",
         "test": "NODE_ENV=test WEBHOOK_SECRET=random GITHUB_TOKEN=1234 JIRA_USERNAME=test@test.com JIRA_TOKEN=123 JIRA_BASE_URL=https://test.atlassian.net JIRA_PROJECT_ID=1 jest",
+        "test:coverage": "NODE_ENV=test WEBHOOK_SECRET=random GITHUB_TOKEN=1234 JIRA_USERNAME=test@test.com JIRA_TOKEN=123 JIRA_BASE_URL=https://test.atlassian.net JIRA_PROJECT_ID=1 jest --coverage",
         "test:watch": "NODE_ENV=test WEBHOOK_SECRET=random GITHUB_TOKEN=1234 JIRA_USERNAME=test@test.com JIRA_TOKEN=123 JIRA_BASE_URL=https://test.atlassian.net JIRA_PROJECT_ID=1 jest --watchAll",
         "flow:start": "flow start",
         "flow:stop": "flow stop",
