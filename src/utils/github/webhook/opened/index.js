@@ -1,6 +1,6 @@
 // @flow
 const jira = require("../../../../utils/jira");
-const { getConfigFromRepo, createGithubComment } = require("../../../../utils/octokit-helpers");
+const { getConfigFromRepo, createGithubComment } = require("./../../../../utils/octokit-helpers");
 const log = require("../../../../utils/logger");
 
 const { JIRA_BASE_URL } = require("../../../../config");

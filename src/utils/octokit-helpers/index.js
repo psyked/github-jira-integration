@@ -88,7 +88,10 @@ const getJiraTicketNumberFromGithubComments = async ({ owner, repo, number }) =>
         );
 
         return jiraComment.split("/").pop() || undefined;
-    } catch (err) {}
+    } catch (err) {
+        log.error({ owner, repo, number }, "Failed to get JIRA ticket number");
+        throw new Error("Failed to get JIRA ticket number");
+    }
 };
 
 module.exports = {
