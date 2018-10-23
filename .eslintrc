@@ -1,0 +1,38 @@
+{
+    "extends": ["airbnb", "plugin:prettier/recommended"],
+    "plugins": ["prettier", "jsx-a11y", "jest"],
+    "parser": "babel-eslint",
+    "env": {
+        "browser": false,
+        "node": true,
+        "jest": true
+    },
+    "rules": {
+        "prettier/prettier": "error",
+        "linebreak-style": 0,
+        "comma-dangle": 0,
+        "indent": [
+            "error",
+            4,
+            {
+                "SwitchCase": 1
+            }
+        ],
+        "padded-blocks": [
+            "error",
+            {
+                "classes": "never",
+                "blocks": "never",
+                "switches": "never"
+            }
+        ],
+        "no-underscore-dangle": "off",
+        "max-len": "off",
+        "no-trailing-spaces": "off",
+        "arrow-body-style": "off",
+        "no-multiple-empty-lines": "off",
+        "no-use-before-define": "off",
+        "no-restricted-syntax": "off",
+        "guard-for-in": "off"
+    }
+}

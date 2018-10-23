@@ -1,59 +1,16 @@
 const nock = require("nock");
-const jira = require("./");
+const createIssue = require("./");
 
 describe("jira", () => {
-    describe("moveIssue", () => {
-        describe("Throws an error", () => {
-            it("when issueNumber is missing", async () => {
-                await expect(jira.moveIssue({})).rejects.toThrow("issueNumber is required");
-            });
-
-            it("when the transitionId is missing", async () => {
-                await expect(
-                    jira.moveIssue({
-                        issueNumber: 1
-                    })
-                ).rejects.toThrow("transitionId is required");
-            });
-
-            it("when failing to make a request to jira", () => {
-                nock("https://test.atlassian.net")
-                    .post("/rest/api/2/issue/TICKET-1/transitions")
-                    .query({ expand: "transition.fields" })
-                    .reply(500);
-
-                expect(
-                    jira.moveIssue({
-                        transitionId: 1,
-                        issueNumber: "TICKET-1"
-                    })
-                ).rejects.toThrow("Failed to move JIRA issue");
-            });
-        });
-        it("makes a request to Jira to move the issue and returns a resolved promise when done", async () => {
-            nock("https://test.atlassian.net")
-                .post("/rest/api/2/issue/TICKET-1/transitions")
-                .query({ expand: "transition.fields" })
-                .reply(204);
-
-            await expect(
-                jira.moveIssue({
-                    transitionId: 1,
-                    issueNumber: "TICKET-1"
-                })
-            ).resolves.not.toThrow();
-        });
-    });
-
     describe("createIssue", () => {
         describe("Throws an error", () => {
             it("when issueType is not configured", async () => {
-                await expect(jira.createIssue()).rejects.toThrow("issueType is required");
+                await expect(createIssue()).rejects.toThrow("issueType is required");
             });
 
             it("when projectId is not configured", async () => {
                 await expect(
-                    jira.createIssue({
+                    createIssue({
                         issueType: "Bug"
                     })
                 ).rejects.toThrow("projectId is required");
@@ -65,7 +22,7 @@ describe("jira", () => {
                     .reply(500);
 
                 await expect(
-                    jira.createIssue({
+                    createIssue({
                         issueType: "Bug",
                         projectId: "1"
                     })
@@ -78,7 +35,7 @@ describe("jira", () => {
                 .post("/rest/api/2/issue")
                 .reply(201, { id: "123" });
 
-            const data = await jira.createIssue({
+            const data = await createIssue({
                 issueType: "Bug",
                 projectId: "1"
             });
@@ -98,7 +55,7 @@ describe("jira", () => {
                 })
                 .reply(201, { id: "123" });
 
-            const data = await jira.createIssue({
+            const data = await createIssue({
                 issueType: "Bug",
                 projectId: "1"
             });
@@ -122,7 +79,7 @@ describe("jira", () => {
                 })
                 .reply(201, { id: "123" });
 
-            const data = await jira.createIssue({
+            const data = await createIssue({
                 issueType: "Bug",
                 projectId: "1"
             });
@@ -148,7 +105,7 @@ describe("jira", () => {
                         })
                         .reply(201, { id: "123" });
 
-                    const data = await jira.createIssue({
+                    const data = await createIssue({
                         issueType: "Bug",
                         projectId: "1"
                     });
@@ -168,7 +125,7 @@ describe("jira", () => {
                         })
                         .reply(201, { id: "123" });
 
-                    const data = await jira.createIssue({
+                    const data = await createIssue({
                         labels: ["override"],
                         issueType: "Bug",
                         projectId: "1"
@@ -193,7 +150,7 @@ describe("jira", () => {
                         })
                         .reply(201, { id: "123" });
 
-                    const data = await jira.createIssue({
+                    const data = await createIssue({
                         issueType: "Bug",
                         projectId: "1"
                     });
@@ -213,7 +170,7 @@ describe("jira", () => {
                         })
                         .reply(201, { id: "123" });
 
-                    const data = await jira.createIssue({
+                    const data = await createIssue({
                         description: "Here is a new description",
                         issueType: "Bug",
                         projectId: "1"

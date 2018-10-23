@@ -2,13 +2,18 @@
     "name": "github-jira",
     "version": "1.0.0",
     "description": "",
-    "main": "index.js",
+    "main": "src/index.js",
     "scripts": {
-        "prestart": "node scripts/config-check",
-        "start": "node index.js",
+        "prestart": "node src/scripts/config-check",
+        "start": "node src/index.js",
         "dev": "npm start && npx ngrok http 3000",
-        "test": "NODE_ENV=test WEBHOOK_SECRET=random GITHUB_TOKEN=1234 JIRA_USERNAME=test@test.com JIRA_TOKEN=123 JIRA_BASE_URL=https://test.atlassian.net JIRA_PROJECT_ID=1 jest",
-        "test:watch": "NODE_ENV=test WEBHOOK_SECRET=random GITHUB_TOKEN=1234 JIRA_USERNAME=test@test.com JIRA_TOKEN=123 JIRA_BASE_URL=https://test.atlassian.net JIRA_PROJECT_ID=1 jest --watchAll"
+        "test": "NODE_ENV=test WEBHOOK_SECRET=random GITHUB_TOKEN=1234 JIRA_USERNAME=test@test.com JIRA_TOKEN=123 JIRA_BASE_URL=https://test.atlassian.net JIRA_PROJECT_ID=1 jest --runInBand",
+        "test:coverage": "NODE_ENV=test WEBHOOK_SECRET=random GITHUB_TOKEN=1234 JIRA_USERNAME=test@test.com JIRA_TOKEN=123 JIRA_BASE_URL=https://test.atlassian.net JIRA_PROJECT_ID=1 jest --runInBand --coverage",
+        "test:watch": "NODE_ENV=test WEBHOOK_SECRET=random GITHUB_TOKEN=1234 JIRA_USERNAME=test@test.com JIRA_TOKEN=123 JIRA_BASE_URL=https://test.atlassian.net JIRA_PROJECT_ID=1 jest --runInBand --watchAll",
+        "flow:start": "flow start",
+        "flow:stop": "flow stop",
+        "flow:status": "flow status",
+        "flow:coverage": "flow coverage"
     },
     "keywords": [],
     "author": "",
@@ -23,13 +28,24 @@
         "base-64": "^0.1.0",
         "bunyan": "^1.8.12",
         "js-yaml": "^3.12.0",
+        "nock": "^9.4.2",
         "request": "^2.87.0",
         "request-promise": "^4.2.2"
     },
     "devDependencies": {
+        "babel-eslint": "^10.0.1",
+        "babel-preset-flow": "^6.23.0",
+        "eslint-config-airbnb": "^17.1.0",
+        "eslint-config-prettier": "^3.1.0",
+        "eslint-plugin-import": "^2.14.0",
+        "eslint-plugin-jest": "^21.24.0",
+        "eslint-plugin-jsx-a11y": "^6.1.1",
+        "eslint-plugin-prettier": "^2.7.0",
+        "eslint-plugin-react": "^7.11.1",
+        "flow-bin": "^0.81.0",
         "jest": "^23.4.0",
-        "nock": "^9.4.2",
         "prettier": "^1.13.7",
+        "prettier-eslint": "^8.8.2",
         "proxyquire": "^2.0.1"
     }
 }
