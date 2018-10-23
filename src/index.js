@@ -1,5 +1,4 @@
 // @flow
-const http = require("http");
 const WebhooksApi = require("@octokit/webhooks");
 
 const { WEBHOOK_SECRET } = require("./config");

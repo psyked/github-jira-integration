@@ -1,4 +1,10 @@
 // @flow
+const jira = require("../../../../utils/jira");
+const {
+    getConfigFromRepo,
+    createGithubComment,
+    getJiraTicketNumberFromGithubComments
+} = require("./../../../../utils/octokit-helpers");
 const log = require("../../../../utils/logger");
 
 const { JIRA_BASE_URL } = require("../../../../config");
