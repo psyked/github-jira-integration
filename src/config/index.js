@@ -1,3 +1,5 @@
+require("dotenv").load();
+
 module.exports = {
     WEBHOOK_SECRET: process.env.WEBHOOK_SECRET,
     GITHUB_TOKEN: process.env.GITHUB_TOKEN,
