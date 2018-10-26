@@ -43,4 +43,4 @@ const getJiraTicketNumberFromGithubComments = async ({ owner, repo, number }) =>
     }
 };
 
-export default getJiraTicketNumberFromGithubComments;
+module.exports = getJiraTicketNumberFromGithubComments;

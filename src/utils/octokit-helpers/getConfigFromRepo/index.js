@@ -36,4 +36,4 @@ const getConfigFromRepo = async ({ owner, repo } = {}) => {
     }
 };
 
-export default getConfigFromRepo;
+module.exports = getConfigFromRepo;

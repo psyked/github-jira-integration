@@ -17,4 +17,4 @@ const createGithubComment = async ({ owner, repo, number, body }) => {
     }
 };
 
-export default createGithubComment;
+module.exports = createGithubComment;
