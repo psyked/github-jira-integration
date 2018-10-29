@@ -29,7 +29,7 @@ describe("getJiraTicketNumberFromGithubComments", () => {
         expect(jiraTicketNumber).toBe("Test-Ticket1");
     });
 
-    it.only("returns the last JIRA number in the array of comments if more than 1 Jira ticket comment is found", async () => {
+    it("returns the last JIRA number in the array of comments if more than 1 Jira ticket comment is found", async () => {
         jest.mock("@octokit/rest", () => {
             return () => ({
                 authenticate: () => {},
