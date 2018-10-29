@@ -1,10 +1,9 @@
 // @flow
-const octokit = require("@octokit/rest")();
-
 const log = require("../../logger");
 
 const createGithubComment = async ({ owner, repo, number, body }) => {
     try {
+        const { octokit } = require("../");
         return await octokit.issues.createComment({
             owner,
             repo,

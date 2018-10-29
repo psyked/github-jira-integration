@@ -13,6 +13,7 @@ octokit.authenticate({
 });
 
 module.exports = {
+    octokit,
     getConfigFromRepo,
     createGithubComment,
     getJiraTicketNumberFromGithubComments

@@ -1,5 +1,4 @@
 // @flow
-const octokit = require("@octokit/rest")();
 const base64 = require("base-64");
 const yaml = require("js-yaml");
 
@@ -10,6 +9,7 @@ const log = require("../../logger");
  */
 const getConfigFromRepo = async ({ owner, repo } = {}) => {
     try {
+        const { octokit } = require("../");
         const githubConfig = await octokit.repos.getContent({
             owner,
             repo,

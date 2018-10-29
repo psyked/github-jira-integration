@@ -1,12 +1,11 @@
 // @flow
-const octokit = require("@octokit/rest")();
-
 const log = require("../../logger");
 
 const { JIRA_BASE_URL } = require("../../../config");
 
 const getComments = async ({ owner, repo, number }) => {
     try {
+        const { octokit } = require("../");
         return await octokit.issues.getComments({
             owner,
             repo,
