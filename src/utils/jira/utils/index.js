@@ -1,6 +1,7 @@
 const base64 = require("base-64");
 
 const log = require("../../logger");
+const jira = require("../../jira");
 
 const { JIRA_TOKEN, JIRA_USERNAME } = require("../../../config");
 
@@ -24,7 +25,19 @@ const generateRequestOptions = () => {
     };
 };
 
+const callMultipleTransitions = async (issueNumber, transitionIds) => {
+    for (const transitionId of transitionIds) {
+        try {
+            await jira.moveIssue({ issueNumber, transitionId });
+            break;
+        } catch (e) {
+            // Ignore dissallowed transitions
+        }
+    }
+};
+
 module.exports = {
     propertiesMustBeDefined,
-    generateRequestOptions
+    generateRequestOptions,
+    callMultipleTransitions
 };
