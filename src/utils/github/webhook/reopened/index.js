@@ -5,6 +5,7 @@ const {
     createGithubComment,
     getJiraTicketNumberFromGithubComments
 } = require("./../../../../utils/octokit-helpers");
+const { callMultipleTransitions } = require("../../../jira/utils");
 const log = require("../../../../utils/logger");
 
 const { JIRA_BASE_URL } = require("../../../../config");
@@ -29,7 +30,11 @@ module.exports = async ({ id, name, payload }) => {
             number
         });
 
-        await jira.moveIssue({ issueNumber, transitionId: jiraTranisitionId });
+        if (Array.isArray(jiraTranisitionId)) {
+            callMultipleTransitions(issueNumber, jiraTranisitionId);
+        } else {
+            await jira.moveIssue({ issueNumber, transitionId: jiraTranisitionId });
+        }
 
         log.info(
             {
